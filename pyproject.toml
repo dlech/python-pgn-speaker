@@ -13,6 +13,7 @@ python = "^3.10"
 chess = "^1.9.4"
 windows-curses = {version = "^2.3.1", platform = "win32"}
 winsdk = {version = "^1.0.0b7", platform = "win32"}
+pyobjc-framework-avfoundation = {version = "^9.0.1", platform = "darwin"}
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.12.0"

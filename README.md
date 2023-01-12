@@ -29,3 +29,4 @@ Or if using the Python Launcher for Windows:
 
 - Python >= 3.10
 - Windows >= 10
+- macOS >= 10.14

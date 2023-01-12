@@ -13,6 +13,8 @@ from . import __version__ as package_version
 
 if sys.platform == "win32":
     from .winsdk_helper import speak
+elif sys.platform == "darwin":
+    from .pyobjc_helper import speak
 else:
     print(f"unsupported platform: '{sys.platform}'", file=sys.stderr)
     exit(1)
@@ -93,13 +95,13 @@ def expand(move: str) -> str:
         segments.append(PIECE[piece])
 
     if start:
-        segments.append(start)
+        segments.append(" ".join(start))
 
     if captures:
         segments.append("takes")
 
     if end:
-        segments.append(end)
+        segments.append(" ".join(end))
 
     if promotion:
         segments.append(PROMOTION[promotion])
