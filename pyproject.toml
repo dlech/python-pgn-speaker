@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pgn-speaker"
-version = "0.1.0"
+version = "1.0.0"
 description = "Reads moves one at a time from a PGN file for practicing chess visualzation skills."
 license = "MIT"
 authors = ["David Lechner <david@lechnology.com>"]
