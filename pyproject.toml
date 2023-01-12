@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "pgn-speaker"
-version = "1.0.0"
+version = "1.0.0.post1"
 description = "Reads moves one at a time from a PGN file for practicing chess visualzation skills."
 license = "MIT"
 authors = ["David Lechner <david@lechnology.com>"]
+readme = "README.md"
+repository = "https://github.com/dlech/python-pgn-speaker"
 
 [tool.poetry.scripts]
 pgn-speaker = 'pgn_speaker.cli:main'
