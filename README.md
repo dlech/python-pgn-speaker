@@ -7,10 +7,11 @@ https://nextlevelchess.blog/improve-your-visualization/
 
 ## Running the program
 
-It is recommended to use [pipx] to ensure you are always running the latest
-version.
+`pgn-speaker` is a Python program and therefore requires a Python runtime.
+Instead of using `pip` to get the package, it is recommended to use [pipx].
+This ensures you are always running the latest version of `pgn-speaker`.
 
-After installing `pipx` run the following command where $PGN is the path to
+After installing `pipx` run the following command where `$PGN` is the path to
 a PGN file saved on your computer.
 
     pipx run pgn-speaker $PGN
