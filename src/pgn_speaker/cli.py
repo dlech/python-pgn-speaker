@@ -4,6 +4,7 @@
 import enum
 import re
 import sys
+from typing import TextIO
 
 import click
 from chess import pgn
@@ -92,6 +93,7 @@ def expand(move: str) -> str:
         r"^([RNBQK]|O-O(?:-O)?)?([a-h]?[1-8]?)??(x)?([a-h][1-8])?(=[BNRQ])?([+#])?$",
         move,
     )
+    assert match is not None, f"invalid move: '{move}'"
 
     piece, start, captures, end, promotion, check = match.groups()
     segments = list[str]()
@@ -129,8 +131,9 @@ def fixup_comment(comment: str) -> str:
 @click.command()
 @click.argument("file", type=click.File("r"))
 @click.version_option(package_version)
-def main(file):
+def main(file: TextIO) -> None:
     game = pgn.read_game(file)
+    assert game is not None, "failed to read PGN file"
 
     click.clear()
     click.echo("PGN Speaker")
@@ -138,7 +141,7 @@ def main(file):
     click.echo("commands: (n)ext, (b)ack, (r)epeat, (f)irst, (l)ast, (q)uit")
     click.echo("")
 
-    node = game
+    node: pgn.Game | pgn.GameNode | pgn.ChildNode | None = game
 
     while True:
         command = click.getchar().lower()
@@ -207,6 +210,7 @@ def main(file):
         else:
             move_num = (node.ply() + 1) // 2
             turn, color = ("...", "black") if node.turn() else (" ", "white")
+            assert isinstance(node, pgn.ChildNode)
             move = node.san()
 
             click.echo(f"{move_num}{turn}{move}", nl=False)

@@ -2,6 +2,7 @@
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features",
     },
+    "python.analysis.typeCheckingMode": "strict",
     "python.formatting.provider": "black",
     "editor.formatOnSave": true,
     "psi-header.config": {
