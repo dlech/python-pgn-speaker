@@ -1,12 +1,11 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2023 David Lechner <david@lechnology.com>
 
-import argparse
-import curses
 import enum
 import re
 import sys
 
+import click
 from chess import pgn
 
 from . import __version__ as package_version
@@ -20,15 +19,21 @@ else:
     exit(1)
 
 
-class Key(enum.IntEnum):
-    B = ord("b")
-    C = ord("c")
-    F = ord("f")
-    L = ord("l")
-    N = ord("n")
-    P = ord("p")
-    Q = ord("q")
-    R = ord("r")
+class Key(enum.Enum):
+    N = "n"
+    B = "b"
+    R = "r"
+    F = "f"
+    L = "l"
+    Q = "q"
+    C = "c"
+
+
+class ArrowKey(enum.Enum):
+    UP = "àh"
+    DOWN = "àp"
+    RIGHT = "àm"
+    LEFT = "àk"
 
 
 PIECE = {
@@ -113,7 +118,6 @@ def expand(move: str) -> str:
 
 
 def fixup_comment(comment: str) -> str:
-
     return (
         re.sub(r"\[[^\]]*\]", "", comment)
         .replace(" $1", "!")
@@ -122,29 +126,33 @@ def fixup_comment(comment: str) -> str:
     )
 
 
-def app(stdscr: curses.window, game: pgn.Game):
-    stdscr.addstr("PGN Speaker\n")
-    stdscr.addstr("-----------\n")
-    stdscr.addstr("commands: (n)ext, (b)ack, (r)epeat, (f)irst, (l)ast, (q)uit\n")
-    stdscr.addstr("\n")
+@click.command()
+@click.argument("file", type=click.File("r"))
+@click.version_option(package_version)
+def main(file):
+    game = pgn.read_game(file)
 
-    x, y = stdscr.getyx()
+    click.clear()
+    click.echo("PGN Speaker")
+    click.echo("-----------")
+    click.echo("commands: (n)ext, (b)ack, (r)epeat, (f)irst, (l)ast, (q)uit")
+    click.echo("")
 
     node = game
 
     while True:
-        key = stdscr.getch()
+        command = click.getchar().lower()
 
-        match key:
-            case Key.Q:
+        match command:
+            case Key.Q.value:
                 # quit program
                 break
-            case Key.N | curses.KEY_RIGHT:
+            case Key.N.value | ArrowKey.RIGHT.value:
                 # next move
                 if node is not None:
                     # if we are not at the end of the file already go to the next move
                     node = node.next()
-            case Key.B | curses.KEY_LEFT:
+            case Key.B.value | ArrowKey.LEFT.value:
                 # back one move
                 if node is None:
                     # if we are at the end of the file, go to the last move
@@ -156,16 +164,16 @@ def app(stdscr: curses.window, game: pgn.Game):
                     if node is None:
                         # we are at the start of the file
                         node = game
-            case Key.R:
+            case Key.R.value:
                 # repeat - don't change node
                 pass
-            case Key.F | curses.KEY_UP:
+            case Key.F.value | ArrowKey.UP.value:
                 # first move
                 node = game.next()
-            case Key.L | curses.KEY_DOWN:
+            case Key.L.value | ArrowKey.DOWN.value:
                 # last move
                 node = game.end()
-            case Key.C:
+            case Key.C.value:
                 # comment
                 comments = list[str]()
 
@@ -185,43 +193,24 @@ def app(stdscr: curses.window, game: pgn.Game):
                 # all other keys ignored
                 continue
 
-        stdscr.move(x, y)
-        stdscr.clrtoeol()
+        # move to start of line
+        click.echo("\r", nl=False)
 
         if node is None:
-            # end of game
             result = game.headers["Result"]
-            stdscr.addstr(result)
+            click.echo(result, nl=False)
             speak(RESULT[result])
         elif node.parent is None:
             start = "start of game"
-            stdscr.addstr(start)
+            click.echo(start, nl=False)
             speak(start)
         else:
             move_num = (node.ply() + 1) // 2
             turn, color = ("...", "black") if node.turn() else (" ", "white")
             move = node.san()
 
-            stdscr.addstr(f"{move_num}{turn}{move}")
+            click.echo(f"{move_num}{turn}{move}", nl=False)
             speak(f"{move_num} {color} {expand(move)}")
 
-
-def main():
-    parser = argparse.ArgumentParser("pgn-speaker")
-
-    parser.add_argument(
-        "file",
-        metavar="<file>",
-        type=argparse.FileType(),
-        help="the path to a .pgn file",
-    )
-
-    parser.add_argument(
-        "-v", "--version", action="version", version=f"%(prog)s {package_version}"
-    )
-
-    args = parser.parse_args()
-
-    game = pgn.read_game(args.file)
-
-    curses.wrapper(app, game)
+        # clear to end of line
+        click.echo("\x1b[K", nl=False)
