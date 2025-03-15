@@ -5,19 +5,19 @@ from pgn_speaker.cli import expand
 
 
 def test_basic():
-    assert expand("e5") == "e5"
-    assert expand("Bc4") == "bishop c4"
+    assert expand("e5") == "e 5"
+    assert expand("Bc4") == "bishop c 4"
 
 
 def test_captures():
-    assert expand("exd5") == "e takes d5"
-    assert expand("Bxf7") == "bishop takes f7"
-    assert expand("Rxa8+") == "rook takes a8 check"
+    assert expand("exd5") == "e takes d 5"
+    assert expand("Bxf7") == "bishop takes f 7"
+    assert expand("Rxa8+") == "rook takes a 8 check"
 
 
 def test_disambiguation():
-    assert expand("Nfd2") == "knight f d2"
-    assert expand("Qh4xg3#") == "queen h4 takes g3 checkmate"
+    assert expand("Nfd2") == "knight f d 2"
+    assert expand("Qh4xg3#") == "queen h 4 takes g 3 checkmate"
 
 
 def test_castling():
@@ -30,5 +30,5 @@ def test_castling():
 
 
 def test_promotion():
-    assert expand("e8=Q") == "e8 promotes to queen"
-    assert expand("exd1=N#") == "e takes d1 promotes to knight checkmate"
+    assert expand("e8=Q") == "e 8 promotes to queen"
+    assert expand("exd1=N#") == "e takes d 1 promotes to knight checkmate"
