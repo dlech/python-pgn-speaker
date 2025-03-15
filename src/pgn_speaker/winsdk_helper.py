@@ -1,15 +1,14 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2023 David Lechner <david@lechnology.com>
 
-from ctypes import WinError
+from concurrent.futures import Future
 from contextvars import ContextVar
+from ctypes import WinError
 from typing import TypeVar
 
-from concurrent.futures import Future
-from winsdk.windows.foundation import IAsyncOperation, AsyncStatus
-from winsdk.windows.media.speechsynthesis import SpeechSynthesizer
+from winsdk.windows.foundation import AsyncStatus, IAsyncOperation
 from winsdk.windows.media.playback import MediaPlayer
-
+from winsdk.windows.media.speechsynthesis import SpeechSynthesizer
 
 T = TypeVar("T")
 P = TypeVar("P")

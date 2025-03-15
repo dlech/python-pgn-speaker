@@ -4,12 +4,11 @@
 from contextvars import ContextVar
 
 from AVFoundation import (
+    AVSpeechBoundaryImmediate,
     AVSpeechSynthesizer,
     AVSpeechUtterance,
-    AVSpeechBoundaryImmediate,
     AVSpeechUtteranceDefaultSpeechRate,
 )
-
 
 speak_context = ContextVar[AVSpeechSynthesizer | None]("context", default=None)
 

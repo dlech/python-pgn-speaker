@@ -20,14 +20,11 @@ Repository = "https://github.com/dlech/python-pgn-speaker"
 pgn-speaker = "pgn_speaker.cli:main"
 
 [dependency-groups]
-lint = ["black>=22.12.0"]
+lint = ["ruff>=0.11.0"]
 test = ["pytest>=7.2.0"]
 
 [tool.uv]
-default-groups = [
-    "lint",
-    "test",
-]
+default-groups = ["lint", "test"]
 
 [build-system]
 requires = ["hatchling"]
