@@ -6,9 +6,9 @@ from contextvars import ContextVar
 from ctypes import WinError
 from typing import TypeVar
 
-from winsdk.windows.foundation import AsyncStatus, IAsyncOperation
-from winsdk.windows.media.playback import MediaPlayer
-from winsdk.windows.media.speechsynthesis import SpeechSynthesizer
+from winrt.windows.foundation import AsyncStatus, IAsyncOperation
+from winrt.windows.media.playback import MediaPlayer
+from winrt.windows.media.speechsynthesis import SpeechSynthesizer
 
 T = TypeVar("T")
 P = TypeVar("P")
