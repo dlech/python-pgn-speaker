@@ -30,6 +30,8 @@ def sync(op: IAsyncOperation[T]) -> T:
                 future.set_exception(WinError(op.error_code.value))
             case AsyncStatus.CANCELED:
                 future.cancel()
+            case _:
+                pass
 
     op.completed = handle_complete
     future.set_running_or_notify_cancel()
