@@ -1,7 +1,7 @@
 [project]
 name = "pgn-speaker"
-version = "1.0.0.post2"
-description = "Reads moves one at a time from a PGN file for practicing chess visualzation skills."
+version = "1.1.0"
+description = "Reads moves one at a time from a PGN file for practicing chess visualization skills."
 authors = [{ name = "David Lechner", email = "david@lechnology.com" }]
 requires-python = ">=3.10"
 readme = "README.md"
